@@ -1,4 +1,9 @@
 import type { LinksFunction } from '@remix-run/node';
+import {
+    Form,
+    useTransition as useNavigation,
+    useActionData,
+} from '@remix-run/react';
 import styles from './NewNote.css';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
@@ -10,9 +15,20 @@ export const NewNote = (props: Props) => {
     const formTitle = 'Title';
     const formContent = 'Content';
     const submitLabel = 'Add Note';
+    const submittingLabel = 'Submitting...';
+    const data = useActionData();
+
+    const navigation = useNavigation();
+    const isSubmitting = navigation.state === 'submitting';
+    const buttonLabel = isSubmitting ? submittingLabel : submitLabel;
+
+    const errors = data?.message ? (
+        <p className='error'>{data.message}</p>
+    ) : null;
 
     return (
-        <form method='post' id={NAME_COMPONENT} data-testid={NAME_COMPONENT}>
+        <Form method='post' id={NAME_COMPONENT} data-testid={NAME_COMPONENT}>
+            {errors}
             <p>
                 <label htmlFor='title'>{formTitle}</label>
                 <input type='text' id='title' name='title' required />
@@ -22,8 +38,8 @@ export const NewNote = (props: Props) => {
                 <textarea id='content' name='content' rows={5} required />
             </p>
             <div className='form-actions'>
-                <button>{submitLabel}</button>
+                <button disabled={isSubmitting}>{buttonLabel}</button>
             </div>
-        </form>
+        </Form>
     );
 };

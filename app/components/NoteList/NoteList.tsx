@@ -3,35 +3,49 @@ import styles from './NoteList.css';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
-type Props = {
-    notes: { title: string; content: string; id: string }[];
+type NoteData = { title: string; content: string; id: string };
+
+type NoteProps = {
+    note: NoteData;
+    index: number;
 };
 
-export const NoteList = ({ notes = [] }: Props) => {
+type NoteListProps = {
+    notes: NoteData[];
+};
+
+const Note = ({ note, index }: NoteProps) => {
+    const noteIdString = `#${index + 1}`;
+    const noteDateString = new Date(note.id).toLocaleDateString('en-US', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
+    return (
+        <article>
+            <header>
+                <ul className='note-meta'>
+                    <li>{noteIdString}</li>
+                    <li>
+                        <time dateTime={note.id}>{noteDateString}</time>
+                    </li>
+                </ul>
+                <h2>{note.title}</h2>
+            </header>
+            <p>{note.content}</p>
+        </article>
+    );
+};
+
+export const NoteList = ({ notes = [] }: NoteListProps) => {
     const NAME_COMPONENT = 'note-list';
 
     const noteListItems = notes.map((note, index) => (
         <li key={note.id} className='note'>
-            <article>
-                <header>
-                    <ul className='note-meta'>
-                        <li>#{index + 1}</li>
-                        <li>
-                            <time dateTime={note.id}>
-                                {new Date(note.id).toLocaleDateString('en-US', {
-                                    day: 'numeric',
-                                    month: 'short',
-                                    year: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                })}
-                            </time>
-                        </li>
-                    </ul>
-                    <h2>{note.title}</h2>
-                </header>
-                <p>{note.content}</p>
-            </article>
+            <Note note={note} index={index} />
         </li>
     ));
 
