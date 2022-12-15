@@ -1,4 +1,5 @@
 import type { LinksFunction } from '@remix-run/node';
+import { Link } from 'react-router-dom';
 import styles from './NoteList.css';
 
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
@@ -25,18 +26,20 @@ const Note = ({ note, index }: NoteProps) => {
     });
 
     return (
-        <article>
-            <header>
-                <ul className='note-meta'>
-                    <li>{noteIdString}</li>
-                    <li>
-                        <time dateTime={note.id}>{noteDateString}</time>
-                    </li>
-                </ul>
-                <h2>{note.title}</h2>
-            </header>
-            <p>{note.content}</p>
-        </article>
+        <Link to={`/notes/${note.id}`}>
+            <article>
+                <header>
+                    <ul className='note-meta'>
+                        <li>{noteIdString}</li>
+                        <li>
+                            <time dateTime={note.id}>{noteDateString}</time>
+                        </li>
+                    </ul>
+                    <h2>{note.title}</h2>
+                </header>
+                <p>{note.content}</p>
+            </article>
+        </Link>
     );
 };
 
