@@ -3,6 +3,7 @@ import type {
     ErrorBoundaryComponent,
     LinksFunction,
     LoaderFunction,
+    MetaFunction,
 } from '@remix-run/node';
 import { json, redirect } from '@remix-run/node';
 import { Link, useCatch, useLoaderData } from '@remix-run/react';
@@ -14,6 +15,11 @@ export const links: LinksFunction = () => [
     ...newNoteLinks(),
     ...noteListLinks(),
 ];
+
+export const meta: MetaFunction = () => ({
+    title: 'All Notes',
+    description: 'Manage your notes.',
+});
 
 export const loader: LoaderFunction = async () => {
     const notes = await getStoredNotes();

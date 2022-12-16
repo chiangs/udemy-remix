@@ -1,4 +1,8 @@
-import type { LinksFunction, LoaderFunction } from '@remix-run/node';
+import type {
+    LinksFunction,
+    LoaderFunction,
+    MetaFunction,
+} from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Link, useCatch, useLoaderData } from '@remix-run/react';
 import type { CatchBoundaryComponent } from '@remix-run/react/dist/routeModules';
@@ -6,6 +10,11 @@ import { getStoredNotes } from '~/data/notes';
 import { NoteDetails, noteDetailsLinks } from '~/components';
 
 export const links: LinksFunction = () => [...noteDetailsLinks()];
+
+export const meta: MetaFunction = ({ data, params }) => ({
+    title: `${data.title} - ${params.noteId}}`,
+    description: 'Manage your note',
+});
 
 /**
  * Destructuring the arg can get you request, params, etc.
